@@ -171,7 +171,7 @@ public class GameSprite extends Sprite
 
    public function hudModelInitialized() : void
    {
-      this.hudView = new HUDView(this);
+      this.hudView = new HUDView();
       this.hudView.x = 600;
       addChild(this.hudView);
 
@@ -524,7 +524,7 @@ public class GameSprite extends Sprite
          stage.dispatchEvent(new Event(Event.RESIZE));
          contains(this.map) && removeChild(this.map);
          this.map.dispose();
-         this.hudView && this.hudView.miniMap.dispose();
+         //this.hudView.dispose();
          CachingColorTransformer.clear();
          TextureRedrawer.clearCache();
          GlowRedrawer.clearCache();

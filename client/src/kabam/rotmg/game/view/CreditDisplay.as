@@ -57,7 +57,7 @@ public class CreditDisplay extends Sprite
       {
          super();
          this.gs = gs;
-         this.showButton = fameButton;
+         this.showButton = false;
          this.creditsText_ = new SimpleText(FONT_SIZE,16777215,false,0,0);
          this.creditsText_.setBold(true);
          this.creditsText_.filters = [new DropShadowFilter(0,0,0,1,4,4,2)];
@@ -75,32 +75,6 @@ public class CreditDisplay extends Sprite
          this.draw(0,0);
          mouseEnabled = false;
          doubleClickEnabled = false;
-      }
-
-      public function addResourceButtons():void
-      {
-         this._fameButton = new SliceScalingButton(TextureParser.instance.getSliceScalingBitmap("UI", "tab_info_button"));
-         addChild(this._fameButton);
-      }
-
-      public function removeResourceButtons():void
-      {
-         if (this._fameButton)
-         {
-            removeChild(this._fameButton);
-         }
-      }
-
-      public function onFameClick(_arg_1:MouseEvent):void
-      {
-         this.onFameMask();
-      }
-
-      private function onFameMask():void
-      {
-         var _local_1:Injector = StaticInjectorContext.getInjector();
-         var _local_2:OpenDialogSignal = _local_1.getInstance(OpenDialogSignal);
-         this.gs.scaledLayer.addChild(new FameContentPopup());
       }
 
       public function draw(credits:int, fame:int) : void
@@ -122,11 +96,6 @@ public class CreditDisplay extends Sprite
          this.fameText_.x = this.fameIcon_.x - this.fameText_.width + 8;
          this.fameText_.y = (creditsText_.height + 4 + this.fameIcon_.height / 2 - this.fameText_.height / 2) - 5;
          this.fameIcon_.y = 35 - this.fameIcon_.height /2 + 8;
-         if (this._fameButton)
-         {
-            this._fameButton.x = ((this.fameIcon_.x - this.fameText_.width) - 16);
-            this._fameButton.y = 19;
-         }
       }
    }
 }

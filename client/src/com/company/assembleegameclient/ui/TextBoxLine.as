@@ -10,10 +10,6 @@ import flash.text.engine.GraphicElement;
 import flash.text.engine.GroupElement;
 import flash.text.engine.TextBlock;
 import flash.text.engine.TextElement;
-
-import kabam.rotmg.emotes.Emote;
-import kabam.rotmg.emotes.Emotes;
-
 public class TextBoxLine
 {
    private static var ELEMENT_FORMATS:ElementFormats = new ElementFormats();
@@ -49,13 +45,6 @@ public class TextBoxLine
    {
       var _local_3:String;
       var _local_2:Array = _arg_1.split(" ");
-      for each (_local_3 in _local_2)
-      {
-         if (Emotes.hasEmote(_local_3))
-         {
-            return (true);
-         };
-      };
       return (false);
    }
 
@@ -67,7 +56,6 @@ public class TextBoxLine
       var textFormat:ElementFormat = ELEMENT_FORMATS.normalFormat_;
       var spacing:Array;
       var str:String;
-      var emote:Emote;
       var name:String = this.name_;
       if(this.nameColor_ != 0){
          var loc1:ElementFormats = new ElementFormats(this.nameColor_);
@@ -150,14 +138,7 @@ public class TextBoxLine
          spacing = this.text_.split(" ");
          for each (str in spacing)
          {
-            if (Emotes.hasEmote(str))
-            {
-               emote = Emotes.getEmote(str);
-               vec.push(new GraphicElement(emote.clone(), emote.width, (emote.height - 5), ELEMENT_FORMATS.normalFormat_))
-            } else
-            {
-               vec.push(new TextElement((str + " "), ELEMENT_FORMATS.normalFormat_));
-            }
+            vec.push(new TextElement((str + " "), ELEMENT_FORMATS.normalFormat_));
          }
       } else
       {

@@ -71,8 +71,6 @@ import kabam.rotmg.ui.signals.UpdateBackpackTabSignal;
          {
             this.updateBackpack.add(this.onUpdateBackPack);
          }
-         if (player.rank >= 5)
-            this.AddModMenu();
       }
       
       private function onTabSelected(name:String) : void
@@ -134,17 +132,6 @@ import kabam.rotmg.ui.signals.UpdateBackpackTabSignal;
          backpackContent.addChild(backpackPotionsInventory);
          var icon:Bitmap = this.iconFactory.makeIconBitmap(26);
          this.view.addTab(icon,backpackContent);
-      }
-
-      private function AddModMenu():void
-      {
-         var modMenuContent:Sprite = new Sprite();
-         modMenuContent.name = TabStripModel.MOD_MENU;
-         modMenuContent.x = modMenuContent.y = 12;
-         var modMenu:ModMenu = new ModMenu(this.view.gs_);
-         modMenuContent.addChild(modMenu);
-         var icon:Bitmap = this.iconFactory.makeIconBitmap(30);
-         this.view.addTab(icon, modMenuContent);
       }
    }
 }

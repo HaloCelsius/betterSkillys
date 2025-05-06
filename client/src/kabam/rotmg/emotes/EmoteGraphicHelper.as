@@ -48,12 +48,7 @@ public class EmoteGraphicHelper {
 
     private function add(text:String, bold:Boolean, color:uint):void {
         for each(var word:String in getAllWords(text)) {
-            if (Emotes.hasEmote(word)) {
-                this.buffer.push(Emotes.getEmote(word).clone());
-            }
-            else {
-                this.buffer.push(makeNormalText(word, bold, color));
-            }
+            this.buffer.push(makeNormalText(word, bold, color));
         }
     }
 }

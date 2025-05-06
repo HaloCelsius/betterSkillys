@@ -562,7 +562,6 @@ public class Map extends Sprite {
             map_.graphics.drawGraphicsData(this.graphicsData_);
         }
 
-        // draw filters
         this.map_.filters.length = 0;
         if (this.player_ != null && (this.player_.condition_[ConditionEffect.CE_FIRST_BATCH] & ConditionEffect.MAP_FILTER_BITMASK) != 0) {
             var filters:Array = [];

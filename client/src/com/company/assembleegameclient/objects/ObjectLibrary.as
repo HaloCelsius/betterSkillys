@@ -239,16 +239,9 @@ public class ObjectLibrary
 
     public static function getSetXMLFromType(_arg_1:int):XML
     {
-        var _local_2:XML;
-        var _local_3:int;
         if (setLibrary_[_arg_1] != undefined)
         {
             return (setLibrary_[_arg_1]);
-        }
-        for each (_local_2 in EmbeddedData.skinsEquipmentSetsXML.EquipmentSet)
-        {
-            _local_3 = int(_local_2.@type);
-            setLibrary_[_local_3] = _local_2;
         }
         return (setLibrary_[_arg_1]);
     }
