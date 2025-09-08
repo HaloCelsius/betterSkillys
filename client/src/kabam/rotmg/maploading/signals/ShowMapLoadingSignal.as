@@ -5,8 +5,6 @@ package kabam.rotmg.maploading.signals
    
    public class ShowMapLoadingSignal extends Signal
    {
-       
-      
       public function ShowMapLoadingSignal()
       {
          super(MapInfo);

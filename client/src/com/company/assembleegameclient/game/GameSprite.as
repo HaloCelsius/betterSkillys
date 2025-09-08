@@ -44,10 +44,13 @@ import flash.utils.setTimeout;
 import kabam.lib.loopedprocs.LoopedCallback;
 import kabam.lib.loopedprocs.LoopedProcess;
 import kabam.rotmg.constants.GeneralConstants;
+import kabam.rotmg.core.StaticInjectorContext;
 import kabam.rotmg.core.model.MapModel;
 import kabam.rotmg.core.model.PlayerModel;
 import kabam.rotmg.core.view.Layers;
 import kabam.rotmg.game.view.CreditDisplay;
+import kabam.rotmg.maploading.signals.HideMapLoadingSignal;
+import kabam.rotmg.maploading.signals.ShowMapLoadingSignal;
 import kabam.rotmg.messaging.impl.GameServerConnection;
 import kabam.rotmg.messaging.impl.incoming.MapInfo;
 import kabam.rotmg.servers.api.Server;
@@ -159,14 +162,14 @@ public class GameSprite extends Sprite
 
    public function showPreloader(mapInfo:MapInfo) : void
    {
-      //var showMapLoading:ShowMapLoadingSignal = StaticInjectorContext.getInjector().getInstance(ShowMapLoadingSignal);
-      //showMapLoading && showMapLoading.dispatch(mapInfo);
+      var showMapLoading:ShowMapLoadingSignal = StaticInjectorContext.getInjector().getInstance(ShowMapLoadingSignal);
+      showMapLoading && showMapLoading.dispatch(mapInfo);
    }
 
    private function hidePreloader() : void
    {
-      //var hideMapLoading:HideMapLoadingSignal = StaticInjectorContext.getInjector().getInstance(HideMapLoadingSignal);
-      //hideMapLoading && hideMapLoading.dispatch();
+      var hideMapLoading:HideMapLoadingSignal = StaticInjectorContext.getInjector().getInstance(HideMapLoadingSignal);
+      hideMapLoading && hideMapLoading.dispatch();
    }
 
    public function hudModelInitialized() : void
@@ -174,17 +177,13 @@ public class GameSprite extends Sprite
       this.hudView = new HUDView();
       this.hudView.x = 600;
       addChild(this.hudView);
-
-      this.scaledLayer = new Sprite();
-      addChild(this.scaledLayer);
-      this.forceScaledLayer = new Sprite();
-      addChild(this.forceScaledLayer);
    }
 
    public function initialize() : void
    {
       this.map.initialize();
-      this.creditDisplay_ = new CreditDisplay(this, true);
+
+       this.creditDisplay_ = new CreditDisplay(this, true);
       this.creditDisplay_.x = 594;
       this.creditDisplay_.y = 0;
       addChild(this.creditDisplay_);
@@ -218,6 +217,12 @@ public class GameSprite extends Sprite
 
       this.toggleStatistics();
       WebMain.STAGE.frameRate = Parameters.data_.fps;
+
+       this.forceScaledLayer = new Sprite();
+       addChild(this.forceScaledLayer);
+
+       this.scaledLayer = new Sprite();
+       addChild(this.scaledLayer);
    }
 
    private function showSafeAreaDisplays() : void

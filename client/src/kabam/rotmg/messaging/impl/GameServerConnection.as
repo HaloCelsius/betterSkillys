@@ -1247,9 +1247,8 @@ public class GameServerConnection
            {
                this.processObjectStatus(objectStatus,newTick.tickTime_,newTick.tickId_);
            }
-           this.lastTickId_ = newTick.tickId_
-
-           if(gs_.bossHealthBar != null && gs_.map.name_ != "Arena"){
+           this.lastTickId_ = newTick.tickId_;
+           if(gs_.bossHealthBar != null && gs_.map.name_ != "Arena" && this.gs_.bossHealthBar.visible){
                gs_.updateBossBar();
                gs_.bossHealthBar.draw();
            }

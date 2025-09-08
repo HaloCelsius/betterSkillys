@@ -87,7 +87,7 @@ import com.company.assembleegameclient.ui.IconButton;
       {
          this.nameText_.setBold(true);
          this.nameText_.x = 36;
-         this.nameText_.y = 0;
+         this.nameText_.y = 6;
          this.nameText_.filters = [new DropShadowFilter(0,0,0)];
          this.nameText_.text = name;
          this.nameText_.updateMetrics();

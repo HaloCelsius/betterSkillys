@@ -15,9 +15,9 @@ package kabam.rotmg.maploading.view
    
    public class MapLoadingView extends Sprite
    {
-      public static const MINIMUM_DISPLAY_TIME:Number = 1000;
+      public static const MINIMUM_DISPLAY_TIME:Number = 100;
       public static const MAX_DIFFICULTY:int = 5;
-      public static const FADE_OUT_TIME:Number = 0.4;
+      public static const FADE_OUT_TIME:Number = 1;
       
       public var MapLoadingSymbol:Class;
       private var screen:DisplayObjectContainer;
@@ -71,7 +71,7 @@ package kabam.rotmg.maploading.view
       public function display(mapName:String, difficulty:int, animation:Animation) : void
       {
          this.mapName = Boolean(mapName)?mapName:"";
-         this.difficulty = difficulty;
+         this.difficulty = 5;
          this.animation = animation;
          this.dataIsSet = true;
          this.startMinimumDisplayTimer();
