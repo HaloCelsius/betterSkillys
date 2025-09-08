@@ -1236,19 +1236,24 @@ public class GameServerConnection
          }
       }
 
-      private function onNewTick(newTick:NewTick) : void
-      {
-         if(this.jitterWatcher_ != null){
-            this.jitterWatcher_.record();
-         }
-         this.move(newTick.tickId_,this.player);
-         var objectStatus:ObjectStatusData = null;
-         for each(objectStatus in newTick.statuses_)
-         {
-            this.processObjectStatus(objectStatus,newTick.tickTime_,newTick.tickId_);
-         }
-         this.lastTickId_ = newTick.tickId_;
-      }
+       private function onNewTick(newTick:NewTick) : void
+       {
+           if(this.jitterWatcher_ != null){
+               this.jitterWatcher_.record();
+           }
+           this.move(newTick.tickId_,this.player);
+           var objectStatus:ObjectStatusData = null;
+           for each(objectStatus in newTick.statuses_)
+           {
+               this.processObjectStatus(objectStatus,newTick.tickTime_,newTick.tickId_);
+           }
+           this.lastTickId_ = newTick.tickId_
+
+           if(gs_.bossHealthBar != null && gs_.map.name_ != "Arena"){
+               gs_.updateBossBar();
+               gs_.bossHealthBar.draw();
+           }
+       }
 
       private function canShowEffect(go:GameObject) : Boolean {
          var isPlayer:Boolean = go.objectId_ == this.playerId_;

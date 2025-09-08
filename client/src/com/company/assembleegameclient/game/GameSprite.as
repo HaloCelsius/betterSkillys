@@ -200,9 +200,8 @@ public class GameSprite extends Sprite
          isVault_ = true;
       if (this.map.name_ == "Arena")
          this.showArenaMenu();
-      else
-         this.addBossBar();
 
+        this.addBossBar();
       this.hidePreloader();
       stage.dispatchEvent(new Event(Event.RESIZE));
       if (this.parent.parent as Layers != null) {
@@ -323,19 +322,25 @@ public class GameSprite extends Sprite
          this.forceScaledLayer.scaleX = result;
          this.forceScaledLayer.scaleY = 1;
       }
-      if (this.bossHealthBar != null)
-      {
-         if (uiscale)
-         {
-            this.bossHealthBar.scaleX = result;
-            this.bossHealthBar.scaleY = 1;
-         }
-         else
-         {
-            this.bossHealthBar.scaleX = sWidth;
-            this.bossHealthBar.scaleY = sHeight;
-         }
-      }
+       if (this.bossHealthBar != null)
+       {
+           var barScaleX:Number;
+           if (uiscale)
+           {
+               barScaleX = result;
+               this.bossHealthBar.scaleX = result;
+               this.bossHealthBar.scaleY = 1;
+           }
+           else
+           {
+               barScaleX = sWidth;
+               this.bossHealthBar.scaleX = sWidth;
+               this.bossHealthBar.scaleY = sHeight;
+           }
+           var playableAreaWidthLogical:Number = 800 - (200 * barScaleX);
+           var playableAreaCenterLogical:Number = playableAreaWidthLogical / 2;
+           this.bossHealthBar.x = playableAreaCenterLogical - (bossHealthBar.width / 2);
+       }
       if (this.arenaMenu != null)
       {
          if (uiscale)

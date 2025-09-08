@@ -73,11 +73,11 @@ package kabam.rotmg.ui.view.components
          mouseChildren = false;
          this.position = position;
          this.grayscaleMatrix = new ColorMatrixFilter(MoreColorUtil.greyscaleFilterMatrix);
-         this.text = new SimpleText(16,0xb3b3b3,false,BUTTON_HEIGHT,BUTTON_WIDTH);
+         this.text = new SimpleText(14,0xb3b3b3,false,BUTTON_HEIGHT,BUTTON_WIDTH);
          this.text.filters = [new DropShadowFilter(0, 0, 0, 1, 4, 4, 2)];
-          this.text.y = 4;
-          this.textTwo = new SimpleText(16,0xb3b3b3,false,BUTTON_HEIGHT,BUTTON_WIDTH);
-         this.textTwo.y = 4;
+          this.text.y = 5;
+          this.textTwo = new SimpleText(14,0xb3b3b3,false,BUTTON_HEIGHT,BUTTON_WIDTH);
+         this.textTwo.y = 5;
          this.textTwo.x = (BUTTON_WIDTH / 2) + 25;
          this.textTwo.setText("/6");
          this.textTwo.filters = [new DropShadowFilter(0, 0, 0, 1, 4, 4, 2)];
@@ -114,9 +114,9 @@ package kabam.rotmg.ui.view.components
             {
                removeChild(this.potionIcon);
             }
-            iconBD = ObjectLibrary.getRedrawnTextureFromType(objectType, 60, false);
+            iconBD = ObjectLibrary.getRedrawnTextureFromType(objectType, 55, false);
             this.potionIcon = new Bitmap(iconBD);
-            this.potionIcon.y = -12;
+            this.potionIcon.y = -11;
             addChild(this.potionIcon);
             iconBD = ObjectLibrary.getRedrawnTextureFromType(objectType, 80, true);
             potionIconBig = new Bitmap(iconBD);
@@ -128,7 +128,7 @@ package kabam.rotmg.ui.view.components
          iconX = CENTER_ICON_X;
          this.bg.graphics.clear();
          this.bg.graphics.drawGraphicsData(this.useGraphicsData);
-         this.text.x = (BUTTON_WIDTH / 2) + 7;
+         this.text.x = (BUTTON_WIDTH / 2) + 9;
          this.textTwo.x = (BUTTON_WIDTH / 2) + 17;
          if (this.potionIcon) {
             this.potionIcon.x = iconX - 15;
