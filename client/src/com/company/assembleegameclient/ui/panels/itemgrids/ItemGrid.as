@@ -24,9 +24,9 @@ package com.company.assembleegameclient.ui.panels.itemgrids
          3:[[1,0,0,1],NO_CUT,NO_CUT,[0,1,1,0],[1,0,0,0],NO_CUT,NO_CUT,[0,1,0,0],[0,0,0,1],NO_CUT,NO_CUT,[0,0,1,0]]
       };
        
-      
+
       private const padding:uint = 4;
-      
+
       private const rowLength:uint = 4;
       
       public var owner:GameObject;
@@ -104,13 +104,13 @@ package com.company.assembleegameclient.ui.panels.itemgrids
       
       protected function addToGrid(tile:ItemTile, numRows:uint, tileIndex:uint) : void
       {
-         tile.drawBackground(CutsByNum[numRows][tileIndex]);
-         tile.addEventListener(MouseEvent.ROLL_OVER,this.onTileHover);
-         tile.x = int(tileIndex % this.rowLength) * (ItemTile.WIDTH + this.padding);
-         tile.y = int(tileIndex / this.rowLength) * (ItemTile.HEIGHT + this.padding);
-         addChild(tile);
+          tile.drawBackground(CutsByNum[numRows][tileIndex]);
+          tile.addEventListener(MouseEvent.ROLL_OVER, this.onTileHover);
+          tile.x = (int((tileIndex % this.rowLength)) * (ItemTile.WIDTH + this.padding));
+          tile.y = (int((tileIndex / this.rowLength)) * (ItemTile.HEIGHT + this.padding));
+          addChild(tile);
       }
-      
+
       public function setItems(items:Vector.<int>, datas:Vector.<Object>, itemIndexOffset:int = 0) : void
       {
       }

@@ -19,10 +19,29 @@ import flash.display3D.Context3DProgramType;
    
    public class Graphic3D
    {
-      private static const gradientVertex:Vector.<Number> = Vector.<Number>(
-              [-0.5, 0.5, 0, 0, 0, 0, 0.01, 0, 1, 0.5, 0.5, 0, 0, 0, 0, 0.3, 1, 1,
-                 -0.5, -0.5, 0, 0, 0, 0, 0.1, 0, 0, 0.5, -0.5, 0, 0, 0, 0, 0.2, 1, 0]);
-      private static const indices:Vector.<uint> = Vector.<uint>([0,1,2,2,1,3]);
+       private static const gradientVertex:Vector.<Number> = Vector.<Number>([
+           0.0,  0.0, 0,    0, 0, 0, 0.5, 0.5, 0.5,
+           0.0, -0.5, 0,    0, 0, 0, 0.0, 0.5, 0.0,
+           0.35, -0.35, 0,  0, 0, 0, 0.0, 0.85, 0.15,
+           0.5,  0.0, 0,    0, 0, 0, 0.0, 1.0, 0.5,
+           0.35, 0.35, 0,   0, 0, 0, 0.0, 0.85, 0.85,
+           0.0,  0.5, 0,    0, 0, 0, 0.0, 0.5, 1.0,
+           -0.35, 0.35, 0,   0, 0, 0, 0.0, 0.15, 0.85,
+           -0.5,  0.0, 0,    0, 0, 0, 0.0, 0.0, 0.5,
+           -0.35, -0.35, 0,  0, 0, 0, 0.0, 0.15, 0.15,
+           0.0,  -0.5, 0,    0, 0, 0, 0.0, 0.5, 0.0
+       ]);
+
+       private static const indices:Vector.<uint> = Vector.<uint>([
+           0, 1, 2,
+           0, 2, 3,
+           0, 3, 4,
+           0, 4, 5,
+           0, 5, 6,
+           0, 6, 7,
+           0, 7, 8,
+           0, 8, 9
+       ]);
 
       public var texture:TextureProxy;
       public var matrix3D:Matrix3D;
@@ -101,10 +120,10 @@ import flash.display3D.Context3DProgramType;
          this.shadowMatrix2D = gradientFill.matrix;
          if(this.gradientVB == null || this.gradientIB == null)
          {
-            this.gradientVB = context3D.GetContext3D().createVertexBuffer(4,9);
-            this.gradientVB.uploadFromVector(gradientVertex,0,4);
-            this.gradientIB = context3D.GetContext3D().createIndexBuffer(6);
-            this.gradientIB.uploadFromVector(indices,0,6);
+             this.gradientVB = c3d.createVertexBuffer(10, 9); // 10 verts, 9 floats per vert
+             this.gradientVB.uploadFromVector(gradientVertex, 0, 10);
+             this.gradientIB = c3d.createIndexBuffer(24);
+             this.gradientIB.uploadFromVector(indices, 0, 24);
          }
          this.shadowTransform(width,height);
       }
@@ -115,8 +134,8 @@ import flash.display3D.Context3DProgramType;
          var raw:Vector.<Number> = this.matrix3D.rawData;
          raw[4] = -this.shadowMatrix2D.c;
          raw[1] = -this.shadowMatrix2D.b;
-         raw[0] = this.shadowMatrix2D.a * 1.5;
-         raw[5] = this.shadowMatrix2D.d * 1.5;
+         raw[0] = this.shadowMatrix2D.a * 2;
+         raw[5] = this.shadowMatrix2D.d * 2;
          raw[12] = this.shadowMatrix2D.tx / width;
          raw[13] = -this.shadowMatrix2D.ty / height;
          this.matrix3D.rawData = raw;
@@ -136,29 +155,26 @@ import flash.display3D.Context3DProgramType;
          this.matrix3D.prependScale(Math.ceil(this.texture.getWidth()),Math.ceil(this.texture.getHeight()),1);
          this.matrix3D.prependTranslation(0.5,-0.5,0);
       }
-      
-      public function render(context3D:Context3DProxy) : void
-      {
-         var programFactory:Program3DFactory = Program3DFactory.getInstance();
-         context3D.setProgram(programFactory.getProgram(context3D,this.repeat));
-         context3D.setTextureAt(0,this.texture);
-         if(this.vertexBufferCustom != null)
-         {
-            context3D.GetContext3D().setVertexBufferAt(0,this.vertexBufferCustom,0,Context3DVertexBufferFormat.FLOAT_3);
-            context3D.GetContext3D().setVertexBufferAt(1,this.vertexBufferCustom,3,Context3DVertexBufferFormat.FLOAT_2);
-            context3D.GetContext3D().setProgramConstantsFromVector(Context3DProgramType.VERTEX,4,this.offsetMatrix);
-            context3D.GetContext3D().setVertexBufferAt(2,null,6,Context3DVertexBufferFormat.FLOAT_2);
-            context3D.drawTriangles(this.indexBuffer);
-         }
-         else
-         {
-            context3D.setVertexBufferAt(0,this.vertexBuffer,0,Context3DVertexBufferFormat.FLOAT_3);
-            context3D.setVertexBufferAt(1,this.vertexBuffer,3,Context3DVertexBufferFormat.FLOAT_2);
-            context3D.GetContext3D().setProgramConstantsFromVector(Context3DProgramType.VERTEX,4,this.offsetMatrix);
-            context3D.GetContext3D().setVertexBufferAt(2,null,6,Context3DVertexBufferFormat.FLOAT_2);
-            context3D.drawTriangles(this.indexBuffer);
-         }
-      }
+
+       public function render(ctx:Context3DProxy):void {
+           ctx.setProgram(Program3DFactory.getInstance().getProgram(ctx, this.repeat));
+           ctx.setTextureAt(0, this.texture);
+           var c3d:Context3D = ctx.GetContext3D();
+           if (this.vertexBufferCustom != null) {
+               c3d.setVertexBufferAt(0, this.vertexBufferCustom, 0, Context3DVertexBufferFormat.FLOAT_3);
+               c3d.setVertexBufferAt(1, this.vertexBufferCustom, 3, Context3DVertexBufferFormat.FLOAT_2);
+               c3d.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4, this.offsetMatrix);
+               c3d.setVertexBufferAt(2, null, 6, Context3DVertexBufferFormat.FLOAT_2);
+               ctx.drawTriangles(this.indexBuffer);
+           }
+           else {
+               ctx.setVertexBufferAt(0, this.vertexBuffer, 0, Context3DVertexBufferFormat.FLOAT_3);
+               ctx.setVertexBufferAt(1, this.vertexBuffer, 3, Context3DVertexBufferFormat.FLOAT_2);
+               c3d.setProgramConstantsFromVector(Context3DProgramType.VERTEX, 4, this.offsetMatrix);
+               c3d.setVertexBufferAt(2, null, 6, Context3DVertexBufferFormat.FLOAT_2);
+               ctx.drawTriangles(this.indexBuffer);
+           }
+       }
       
       public function renderShadow(context3D:Context3DProxy) : void
       {

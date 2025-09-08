@@ -27,7 +27,6 @@ namespace WorldServer.core
         public ServerConfig Configuration { get; private set; }
         public Resources Resources { get; private set; }
         public Database Database { get; private set; }
-        public MarketSweeper MarketSweeper { get; private set; }
         public ConnectionManager ConnectionManager { get; private set; }
         public ConnectionListener ConnectionListener { get; private set; }
         public ChatManager ChatManager { get; private set; }
@@ -61,7 +60,6 @@ namespace WorldServer.core
 
             Resources = new Resources(Configuration.serverSettings.resourceFolder, true, true);
             Database = new Database(Resources, Configuration);
-            MarketSweeper = new MarketSweeper(Database);
             ConnectionManager = new ConnectionManager(this);
             ConnectionListener = new ConnectionListener(this);
             ChatManager = new ChatManager(this);
@@ -121,7 +119,6 @@ namespace WorldServer.core
             InterServerManager.Initialize();
             ChatManager.Initialize();
             ConnectionListener.Initialize();
-            MarketSweeper.Start();
             ConnectionListener.Start();
             InterServerManager.JoinNetwork();
 
@@ -193,9 +190,6 @@ namespace WorldServer.core
 
             Log.Info("Disposed 'Database'.");
             Database.Dispose();
-
-            Log.Info("Disposed 'MarketSweeper'.");
-            MarketSweeper.Stop();
 
             Log.Info("Disposed 'ChatManager'.");
             ChatManager.Dispose();

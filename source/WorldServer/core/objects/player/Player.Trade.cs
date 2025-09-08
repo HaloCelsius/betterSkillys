@@ -16,38 +16,20 @@ namespace WorldServer.core.objects
         public bool TradeAccepted { get; set; }
         public Player TradeTarget { get; set; }
 
-        public void CancelTrade(bool leftmarket = false)
+        public void CancelTrade()
         {
-            if (!leftmarket)
+            Client.SendPacket(new TradeDone()
             {
-                Client.SendPacket(new TradeDone()
+                Code = 1,
+                Description = "Trade canceled!"
+            });
+
+            if (TradeTarget != null && TradeTarget.Client != null)
+                TradeTarget.Client.SendPacket(new TradeDone()
                 {
                     Code = 1,
                     Description = "Trade canceled!"
                 });
-
-                if (TradeTarget != null && TradeTarget.Client != null)
-                    TradeTarget.Client.SendPacket(new TradeDone()
-                    {
-                        Code = 1,
-                        Description = "Trade canceled!"
-                    });
-            }
-            else
-            {
-                Client.SendPacket(new TradeDone()
-                {
-                    Code = 1,
-                    Description = "You left the market, Trade canceled!"
-                });
-
-                if (TradeTarget != null && TradeTarget.Client != null)
-                    TradeTarget.Client.SendPacket(new TradeDone()
-                    {
-                        Code = 1,
-                        Description = "Client left the market, Trade canceled!"
-                    });
-            }
 
             ResetTrade();
         }

@@ -22,7 +22,7 @@ package kabam.rotmg.ui.view.components
    import flash.utils.Timer;
    import org.osflash.signals.Signal;
    import org.osflash.signals.natives.NativeSignal;
-   
+
    public class PotionSlotView extends Sprite
    {
       public static var BUTTON_WIDTH:int = 84;
@@ -32,7 +32,7 @@ package kabam.rotmg.ui.view.components
       private static var LEFT_ICON_X:int = -6;
       private static const DOUBLE_CLICK_PAUSE:uint = 250;
       private static const DRAG_DIST:int = 3;
-      
+
       public var position:int;
       public var objectType:int;
       public var click:NativeSignal;
@@ -58,7 +58,7 @@ package kabam.rotmg.ui.view.components
       private var pendingSecondClick:Boolean;
       private var isDragging:Boolean;
       private var showPots:Boolean;
-      
+
       public function PotionSlotView(cuts:Array, position:int)
       {
          this.lightGrayFill = new GraphicsSolidFill(5526612,1);
@@ -73,11 +73,11 @@ package kabam.rotmg.ui.view.components
          mouseChildren = false;
          this.position = position;
          this.grayscaleMatrix = new ColorMatrixFilter(MoreColorUtil.greyscaleFilterMatrix);
-         this.text = new SimpleText(16,0xfffff,false,BUTTON_HEIGHT,BUTTON_WIDTH);
-         this.text.setBold(true);
+         this.text = new SimpleText(16,0xb3b3b3,false,BUTTON_HEIGHT,BUTTON_WIDTH);
          this.text.filters = [new DropShadowFilter(0, 0, 0, 1, 4, 4, 2)];
-         this.textTwo = new SimpleText(12,0xb3b3b3,false,BUTTON_HEIGHT,BUTTON_WIDTH);
-         this.textTwo.y = 7;
+          this.text.y = 4;
+          this.textTwo = new SimpleText(16,0xb3b3b3,false,BUTTON_HEIGHT,BUTTON_WIDTH);
+         this.textTwo.y = 4;
          this.textTwo.x = (BUTTON_WIDTH / 2) + 25;
          this.textTwo.setText("/6");
          this.textTwo.filters = [new DropShadowFilter(0, 0, 0, 1, 4, 4, 2)];
@@ -114,9 +114,9 @@ package kabam.rotmg.ui.view.components
             {
                removeChild(this.potionIcon);
             }
-            iconBD = ObjectLibrary.getRedrawnTextureFromType(objectType, 40, false);
+            iconBD = ObjectLibrary.getRedrawnTextureFromType(objectType, 60, false);
             this.potionIcon = new Bitmap(iconBD);
-            this.potionIcon.y = -7;
+            this.potionIcon.y = -12;
             addChild(this.potionIcon);
             iconBD = ObjectLibrary.getRedrawnTextureFromType(objectType, 80, true);
             potionIconBig = new Bitmap(iconBD);
@@ -128,9 +128,10 @@ package kabam.rotmg.ui.view.components
          iconX = CENTER_ICON_X;
          this.bg.graphics.clear();
          this.bg.graphics.drawGraphicsData(this.useGraphicsData);
-         this.text.x = (BUTTON_WIDTH / 2) + 16;
+         this.text.x = (BUTTON_WIDTH / 2) + 7;
+         this.textTwo.x = (BUTTON_WIDTH / 2) + 17;
          if (this.potionIcon) {
-            this.potionIcon.x = iconX + 15;
+            this.potionIcon.x = iconX - 15;
          }
          if (potions <= 1)
          {
@@ -157,12 +158,12 @@ package kabam.rotmg.ui.view.components
          this.text.setText(_arg1);
          this.text.updateMetrics();
       }
-      
+
       private function onMouseOut(e:MouseEvent) : void
       {
          this.setPendingDoubleClick(false);
       }
-      
+
       private function onMouseUp(e:MouseEvent) : void
       {
          if(this.isDragging)
@@ -184,7 +185,7 @@ package kabam.rotmg.ui.view.components
             this.buyUse.dispatch();
          }
       }
-      
+
       private function onMouseDown(e:MouseEvent) : void
       {
          if(showPots)
@@ -192,7 +193,7 @@ package kabam.rotmg.ui.view.components
             this.beginDragCheck(e);
          }
       }
-      
+
       private function setPendingDoubleClick(isPending:Boolean) : void
       {
          this.pendingSecondClick = isPending;
@@ -206,7 +207,7 @@ package kabam.rotmg.ui.view.components
             this.doubleClickTimer.stop();
          }
       }
-      
+
       private function beginDragCheck(e:MouseEvent) : void
       {
          this.dragStart = new Point(e.stageX,e.stageY);
@@ -214,14 +215,14 @@ package kabam.rotmg.ui.view.components
          addEventListener(MouseEvent.MOUSE_OUT,this.cancelDragCheck);
          addEventListener(MouseEvent.MOUSE_UP,this.cancelDragCheck);
       }
-      
+
       private function cancelDragCheck(e:MouseEvent) : void
       {
          removeEventListener(MouseEvent.MOUSE_MOVE,this.onMouseMoveCheckDrag);
          removeEventListener(MouseEvent.MOUSE_OUT,this.cancelDragCheck);
          removeEventListener(MouseEvent.MOUSE_UP,this.cancelDragCheck);
       }
-      
+
       private function onMouseMoveCheckDrag(e:MouseEvent) : void
       {
          var dx:Number = e.stageX - this.dragStart.x;
@@ -234,12 +235,12 @@ package kabam.rotmg.ui.view.components
             this.beginDrag();
          }
       }
-      
+
       private function onDoubleClickTimerComplete(e:TimerEvent) : void
       {
          this.setPendingDoubleClick(false);
       }
-      
+
       private function beginDrag() : void
       {
          this.isDragging = true;
@@ -247,7 +248,7 @@ package kabam.rotmg.ui.view.components
          stage.addChild(this.potionIconDraggableSprite);
          this.potionIconDraggableSprite.addEventListener(MouseEvent.MOUSE_UP,this.endDrag);
       }
-      
+
       private function endDrag(e:MouseEvent) : void
       {
          this.isDragging = false;
@@ -258,7 +259,7 @@ package kabam.rotmg.ui.view.components
          this.potionIconDraggableSprite.removeEventListener(MouseEvent.MOUSE_UP,this.endDrag);
          this.drop.dispatch(this.potionIconDraggableSprite.dropTarget);
       }
-      
+
       private function onRemovedFromStage(e:Event) : void
       {
          this.setPendingDoubleClick(false);

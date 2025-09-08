@@ -34,7 +34,7 @@ package com.company.assembleegameclient.ui.panels.itemgrids.itemtiles
          bmpData.draw(tempText);
          this.hotKeyBMP = new Bitmap(bmpData);
          this.hotKeyBMP.x = WIDTH / 2 - tempText.width / 2;
-         this.hotKeyBMP.y = HEIGHT / 2 - 18;
+         this.hotKeyBMP.y = HEIGHT / 2 - 14;
          addChildAt(this.hotKeyBMP,0);
       }
       

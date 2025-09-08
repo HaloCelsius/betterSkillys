@@ -290,7 +290,6 @@ namespace App
         public string DeadMusic { get; private set; }
 
         public Vault Vault { get; private set; }
-        public int[] StoredPotions { get; private set; }
         public Stats Stats { get; private set; }
         public GuildIdentity Guild { get; private set; }
 
@@ -315,7 +314,6 @@ namespace App
                 DeadMusic = core.Resources.Settings.DeadMusic,
 
                 Vault = Vault.FromDb(acc, new DbVault(acc)),
-                StoredPotions = acc.StoredPotions ?? new int[8],
                 Stats = Stats.FromDb(acc, new DbClassStats(acc)),
                 Guild = GuildIdentity.FromDb(acc, new DbGuild(acc)),
 
@@ -341,17 +339,11 @@ namespace App
                     new XElement("NextCharSlotCurrency", NextCharSlotCurrency),
                     new XElement("MenuMusic", MenuMusic),
                     new XElement("DeadMusic", DeadMusic),
-                    new XElement("StoredPotions", string.Join(",", StoredPotions)),
 
                     Vault.ToXml(),
                     Stats.ToXml(),
                     Guild.ToXml()
                 );
-        }
-
-        public XElement PotionsToXml()
-        {
-            return new XElement("StoredPotions", string.Join(",", StoredPotions));
         }
     }
 

@@ -22,7 +22,7 @@ package com.company.assembleegameclient.ui.panels.itemgrids
          for(var i:int = 0; i < this.NUM_SLOTS; i++)
          {
             tile = new EquipmentTile(i,this,interactive);
-            addToGrid(tile,1,i);
+             addToGrid(tile,1,i);
             tile.setType(invTypes[i]);
             this.tiles[i] = tile;
          }

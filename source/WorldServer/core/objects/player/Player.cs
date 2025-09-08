@@ -464,9 +464,7 @@ namespace WorldServer.core.objects
             }
             base.Tick(ref time);
         }
-
-        public bool IsInMarket { get; private set; }
-
+        
         // todo rename these damn things
         public bool CantApplySlotEffect(int slot)
         {

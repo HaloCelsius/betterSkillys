@@ -139,6 +139,40 @@ public class StatusBar extends Sprite
       }
    }
 
+    public function setSize(newWidth:int, newHeight:int):void {
+        this.w_ = newWidth;
+        this.h_ = newHeight;
+
+        if (this.labelText_) {
+            this.centerVertically(this.labelText_);
+        }
+        if (this.valueText_) {
+            this.centerVertically(this.valueText_);
+        }
+        if (this.boostText_) {
+            this.centerVertically(this.boostText_);
+        }
+        if (this.multiplierIcon) {
+            this.multiplierIcon.x = (this.w_ - 25);
+        }
+
+        if (contains(this.valueText_)) {
+            if (contains(this.boostText_)) {
+                this.valueText_.x = ((this.w_ / 2) - ((this.valueText_.width + this.boostText_.width) / 2));
+                this.boostText_.x = (this.valueText_.x + this.valueText_.width);
+            } else {
+                this.valueText_.x = ((this.w_ / 2) - (this.valueText_.width / 2));
+            }
+        }
+
+        this.internalDraw();
+    }
+
+    public function centerVertically(_arg1:SimpleText):void {
+        var padding:int = 2;
+        _arg1.y = (this.h_ / 2) - (_arg1.actualHeight_ / 2) + padding;
+    }
+
    public function setMaxText(text:String):void{
       this.maxText_ = text;
    }

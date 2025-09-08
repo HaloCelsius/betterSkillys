@@ -114,8 +114,8 @@ import kabam.rotmg.constants.ItemConstants;
              }
 
              this.itemBitmap.bitmapData = texture;
-            this.itemBitmap.x = -texture.width / 2;
-            this.itemBitmap.y = -texture.height / 2;
+             this.itemBitmap.x = -texture.width / 2;
+             this.itemBitmap.y = -texture.height / 2;
 
              if (hasAnimatedSprites && spritePeriod != -1 && spriteFile != null && spriteArray != null && first != -1 && last != -1) {
                  this.spriteFile = spriteFile;

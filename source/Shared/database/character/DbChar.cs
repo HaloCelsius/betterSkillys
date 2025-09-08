@@ -28,12 +28,10 @@ namespace Shared.database.character
         public ushort ObjectType { get => GetValue<ushort>("charType"); set => SetValue("charType", value); }
         public int PetId { get => GetValue<int>("petId"); set => SetValue("petId", value); }
         public int Skin { get => GetValue<int>("skin"); set => SetValue("skin", value); }
-
         public int[] Stats { get => GetValue<int[]>("stats"); set => SetValue("stats", value); }
         public int Tex1 { get => GetValue<int>("tex1"); set => SetValue("tex1", value); }
         public int Tex2 { get => GetValue<int>("tex2"); set => SetValue("tex2", value); }
         public int XPBoostTime { get => GetValue<int>("xpBoost"); set => SetValue("xpBoost", value); }
-        public bool CompletedTrialOfSouls { get => GetValue<bool>("completedTrialOfSouls"); set => SetValue("completedTrialOfSouls", value); }
 
         public DbChar(DbAccount account, int charId, bool isAsync = false)
         {

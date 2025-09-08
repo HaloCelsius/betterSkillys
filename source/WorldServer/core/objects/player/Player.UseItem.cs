@@ -473,7 +473,7 @@ namespace WorldServer.core.objects
                     case ActivateEffects.RemoveNegativeConditionsSelf:
                         AERemoveNegativeConditionSelf(item, target, eff);
                         break;
-                    case ActivateEffects.ShurikenAbility:
+                    case ActivateEffects.Shuriken:
                         AEShurikenAbility(clientTime, time, item, target, eff, useType);
                         break;
                     case ActivateEffects.PermaPet:
@@ -942,37 +942,7 @@ namespace WorldServer.core.objects
             if (Stats.Base[idx] >= statInfo[idx].MaxValue)
             {
                 Stats.Base[idx] = statInfo[idx].MaxValue;
-                var inc = idx <= 1 ? eff.Amount / 5 : eff.Amount;
-                var storedAmount = AttemptToAdd(idx, inc);
-
-                if (storedAmount != -1)
-                {
-                    string statname = item.DisplayName.Split(' ').Last();
-                    bool checkVowel = statname.Substring(0, 1) == "A";
-                    string accForVowel = checkVowel ? "n" : "";
-                    switch (inc)
-                    {
-                        case 1:
-                            SendInfo($"Added a{accForVowel} {statname} potion to your storage! [{storedAmount}/50]");
-                            break;
-                        case 2:
-                            SendInfo($"Added two {statname} potions to your storage! [{storedAmount}/50]");
-                            break;
-                        default:
-                            SendInfo($"Added multiple {statname} potions to your storage! [{storedAmount}/50]");
-                            break;
-                    }
-                } 
-                else
-                {
-                    var ent = World.GetEntity(objId);
-                    if (ent is Container container)
-                        container.Inventory[slot] = item;
-                    else
-                        Inventory[slot] = item;
-                    SendError("Your potion storage is full..");
-                    return;
-                }
+                SendError($"{item.DisplayName} was not consumed, you are already {Stats.Base[idx]}/{statInfo[idx].MaxValue}.");
             } else
             {
                 Stats.Base[idx] += amount;
@@ -980,20 +950,6 @@ namespace WorldServer.core.objects
                     Stats.Base[idx] = statInfo[idx].MaxValue;
                 SendInfo($"{item.DisplayName} was consumed");
             }
-        }
-
-        private int AttemptToAdd(int idx, int amount)
-        {
-            var potions = Client.Account.StoredPotions;
-            var acc = Client.Account;
-            if (potions[idx] < 50)
-                potions[idx] += amount;
-            else 
-                return -1;
-
-            acc.StoredPotions = potions;
-            acc.FlushAsync();
-            return acc.StoredPotions[idx];
         }
 
         private void AELDBoost(TickTime time, Item item, Position target, ActivateEffect eff)

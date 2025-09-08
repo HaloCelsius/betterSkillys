@@ -136,6 +136,7 @@ public class Parameters {
         setDefaultKey("switchTabs", KeyCodes.B);
         setDefaultKey("refresh_button_servers", KeyCodes.F5);
         setDefault("showStatistics", false);
+        setDefault("toggleFullscreen", false);
         setDefault("disableAllParticles", false);
         setDefault("uiQuality", false);
         setDefault("FS", true);
@@ -173,7 +174,8 @@ public class Parameters {
         setDefault("GPURender", true);
         setDefault("eyeCandyParticles", true);
         setDefault("hpBars", true);
-        setDefault("allyShots", true);
+        setDefault("allyShots", false);
+        setDefault("hudscale", true);
         setDefault("allyDamage", true);
         setDefault("noAllyNotifications", false);
         setDefault("fps", 60);

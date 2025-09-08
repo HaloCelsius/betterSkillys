@@ -174,9 +174,6 @@ public class GameObject extends BasicObject {
             isInvincible_ = true;
         }
         this.props_.loadSounds();
-
-        this.hpBarBackFillMatrix = new Matrix();
-        this.hpBarFillMatrix = new Matrix();
     }
 
     public var props_:ObjectProperties;
@@ -239,12 +236,13 @@ public class GameObject extends BasicObject {
     private var icons_:Vector.<BitmapData> = null;
     private var iconFills_:Vector.<GraphicsBitmapFill> = null;
     private var iconPaths_:Vector.<GraphicsPath> = null;
+
     private var hpBarBackFill:GraphicsSolidFill = null;
     private var hpBarBackPath:GraphicsPath = null;
     private var hpBarFill:GraphicsSolidFill = null;
     private var hpBarPath:GraphicsPath = null;
-    private var hpBarBackFillMatrix:Matrix = null;
-    private var hpBarFillMatrix:Matrix = null;
+    private var hpBarBgFill:GraphicsSolidFill = null;
+    private var hpBarBgPath:GraphicsPath = null;
 
     override public function dispose():void {
         var obj:Object = null;
@@ -398,7 +396,7 @@ public class GameObject extends BasicObject {
 
     override public function draw(graphicsData:Vector.<IGraphicsData>, camera:Camera, time:int):void {
         var texture:BitmapData = this.getTexture(camera, time);
-        if (this.props_.drawOnGround_ || this.obj3D_ != null && Parameters.isGpuRender()) {
+        if (this.props_.drawOnGround_) {
             if (square_.faces_.length == 0) {
                 return;
             }
@@ -1217,44 +1215,101 @@ public class GameObject extends BasicObject {
         return texture;
     }
 
-    /* used DoM for reference :P i ain't learning ab the difference between GraphicsBitmapFills and GraphicSolidFills rn fuck that */
-    protected function drawHpBar(param1:Vector.<IGraphicsData>, param2:int=6):void
-    {
-        var _loc6:Number;
-        var _loc7:Number;
-        if (this.hpBarPath == null)
-        {
+    protected function drawHpBar(_arg1:Vector.<IGraphicsData>, _arg2:int):void {
+        var _loc3_:Number = NaN;
+        var _loc4_:Number = NaN;
+        var _loc5_:Number = NaN;
+        var _loc6_:Number = NaN;
+        var _loc8_:int = 0;
+        var _loc9_:int = 0;
+        var _loc10_:int = 0;
+        var _loc11_:int = 0;
+        var _loc12_:int = 0;
+        var _loc13_:int = 0;
+
+        if (this.hpBarPath == null) {
             this.hpBarBackFill = new GraphicsSolidFill();
             this.hpBarBackPath = new GraphicsPath(GraphicsUtil.QUAD_COMMANDS, new Vector.<Number>());
-            this.hpBarFill = new GraphicsSolidFill();
+            this.hpBarFill = new GraphicsSolidFill(0x10FF00);
             this.hpBarPath = new GraphicsPath(GraphicsUtil.QUAD_COMMANDS, new Vector.<Number>());
-        };
-        if (((!(this is Player)) && (this.hp_ > this.maxHP_)))
-        {
-            this.maxHP_ = this.hp_;
-        };
-        this.hpBarBackFill.color = 0x111111;
-        var _loc3:int = 20;
-        var _loc4:int = 5;
+            this.hpBarBgFill = new GraphicsSolidFill(0x121212);
+            this.hpBarBgPath = new GraphicsPath(GraphicsUtil.QUAD_COMMANDS, new Vector.<Number>());
+        }
+
+        var hp:Number = this.dead_ ? 0 : this.hp_;
+        var maxHP:Number = this.maxHP_;
+
+        if (hp <= maxHP) {
+            _loc3_ = (maxHP - hp) / maxHP;
+            _loc5_ = (maxHP - hp) / (maxHP / 2);
+            _loc6_ = (maxHP / 2 - hp) / (maxHP / 2);
+
+            this.hpBarBackFill.color = 0x121212;
+
+            if (this.props_.isEnemy_) {
+                if (hp > this.maxHP_ / 2)
+                    this.hpBarFill.color = MoreColorUtil.lerpColor(65280, 16776960, _loc5_);
+                else
+                    this.hpBarFill.color = MoreColorUtil.lerpColor(16776960, 16711680, _loc6_);
+            }
+        }
+        else
+            this.hpBarBackFill.color = 0x10FF00;
+
+        _loc8_ = 20;
+
+        if (map_.player_.objectId_ == this.objectId_)
+            _loc9_ = 7;
+        else
+            _loc9_ = 20;
+
+        _loc10_ = 4;
+        _loc11_ = 21;
+
+        if (map_.player_.objectId_ == this.objectId_)
+            _loc12_ = 6;
+        else
+            _loc12_ = 19;
+
+        _loc13_ = 6;
+
+        if (this.props_.isEnemy_) {
+            _loc8_ = 20;
+            _loc9_ = 7;
+            _loc10_ = 4;
+            _loc11_ = 21;
+            _loc12_ = 6;
+            _loc13_ = 6;
+        }
+
+        this.hpBarBgPath.data.length = 0;
+        var vector0:Vector.<Number> = (this.hpBarBgPath.data as Vector.<Number>);
+        vector0.push(posS_[0] - _loc11_, posS_[1] + _loc12_, posS_[0] + _loc11_, posS_[1] + _loc12_, posS_[0] + _loc11_, posS_[1] + _loc12_ + _loc13_, posS_[0] - _loc11_, posS_[1] + _loc12_ + _loc13_);
+        this.hpBarBgPath.data = vector0;
+        _arg1.push(this.hpBarBgFill);
+        _arg1.push(this.hpBarBgPath);
+        _arg1.push(GraphicsUtil.END_FILL);
         this.hpBarBackPath.data.length = 0;
-        var _loc5:Number = 1.2;
-        (this.hpBarBackPath.data as Vector.<Number>).push(((posS_[0] - _loc3) - _loc5), ((posS_[1] + param2) - _loc5), ((posS_[0] + _loc3) + _loc5), ((posS_[1] + param2) - _loc5), ((posS_[0] + _loc3) + _loc5), (((posS_[1] + param2) + _loc4) + _loc5), ((posS_[0] - _loc3) - _loc5), (((posS_[1] + param2) + _loc4) + _loc5));
-        param1.push(this.hpBarBackFill);
-        param1.push(this.hpBarBackPath);
-        param1.push(GraphicsUtil.END_FILL);
-        if (this.hp_ > 0)
-        {
-            _loc6 = (this.hp_ / this.maxHP_);
-            _loc7 = ((_loc6 * 2) * _loc3);
+        var vector1:Vector.<Number> = (this.hpBarBackPath.data as Vector.<Number>);
+        vector1.push(posS_[0] - _loc8_, posS_[1] + _loc9_, posS_[0] + _loc8_, posS_[1] + _loc9_, posS_[0] + _loc8_, posS_[1] + _loc9_ + _loc10_, posS_[0] - _loc8_, posS_[1] + _loc9_ + _loc10_);
+        this.hpBarBackPath.data = vector1;
+        _arg1.push(this.hpBarBackFill);
+        _arg1.push(this.hpBarBackPath);
+        _arg1.push(GraphicsUtil.END_FILL);
+        if (hp > 0) {
+            _loc4_ = hp / this.maxHP_ * 2 * _loc8_;
             this.hpBarPath.data.length = 0;
-            (this.hpBarPath.data as Vector.<Number>).push((posS_[0] - _loc3), (posS_[1] + param2), ((posS_[0] - _loc3) + _loc7), (posS_[1] + param2), ((posS_[0] - _loc3) + _loc7), ((posS_[1] + param2) + _loc4), (posS_[0] - _loc3), ((posS_[1] + param2) + _loc4));
-            this.hpBarFill.color = ((_loc6 < 0.5) ? ((_loc6 < 0.2) ? 14684176 : 16744464) : 0x10FF00);
-            param1.push(this.hpBarFill);
-            param1.push(this.hpBarPath);
-            param1.push(GraphicsUtil.END_FILL);
-        };
+            var vector2:Vector.<Number> = (this.hpBarPath.data as Vector.<Number>);
+            vector2.push(posS_[0] - _loc8_, posS_[1] + _loc9_, posS_[0] - _loc8_ + _loc4_, posS_[1] + _loc9_, posS_[0] - _loc8_ + _loc4_, posS_[1] + _loc9_ + _loc10_, posS_[0] - _loc8_, posS_[1] + _loc9_ + _loc10_);
+            this.hpBarPath.data = vector2;
+            _arg1.push(this.hpBarFill);
+            _arg1.push(this.hpBarPath);
+            _arg1.push(GraphicsUtil.END_FILL);
+        }
+
         GraphicsFillExtra.setSoftwareDrawSolid(this.hpBarFill, true);
         GraphicsFillExtra.setSoftwareDrawSolid(this.hpBarBackFill, true);
+        GraphicsFillExtra.setSoftwareDrawSolid(this.hpBarBgFill, true);
     }
 
 }

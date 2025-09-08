@@ -47,13 +47,15 @@ import flash.display3D.Context3DBlendFactor;
 
       public static function Dimensions() : void
       {
-         var mscale:Number = Parameters.data_.mscale;
-         var WidthScaled:Number = WebMain.sWidth / mscale;
-         var HeightScaled:Number = WebMain.sHeight / mscale;
-         WIDTH = WidthScaled;
-         HALF_WIDTH = WidthScaled / 2;
-         HEIGHT = HeightScaled;
-         HALF_HEIGHT = HeightScaled / 2;
+          var mscale:Number = Parameters.data_.mscale;
+          if(!isNaN(mscale)){ // why is mscale nan?
+              var WidthScaled:Number = WebMain.sWidth / mscale;
+              var HeightScaled:Number = WebMain.sHeight / mscale;
+              WIDTH = WidthScaled;
+              HALF_WIDTH = WidthScaled / 2;
+              HEIGHT = HeightScaled;
+              HALF_HEIGHT = HeightScaled / 2;
+          }
       }
 
       public function configure() : void

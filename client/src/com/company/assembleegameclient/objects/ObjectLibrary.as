@@ -80,9 +80,7 @@ public class ObjectLibrary
         "Sign":Sign,
         "SpiderWeb":SpiderWeb,
         "Stalagmite":Stalagmite,
-        "Wall":Wall,
-        "PotionStorage":PotionStorage,
-        "MarketNPC":MarketNPC
+        "Wall":Wall
     }
     private static var currentDungeon:String = "";
 

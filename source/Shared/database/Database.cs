@@ -4,7 +4,6 @@ using Shared.database.account;
 using Shared.database.character;
 using Shared.database.guild;
 using Shared.database.leaderboard;
-using Shared.database.market;
 using Shared.database.party;
 using Shared.database.vault;
 using Shared.resources;
@@ -188,54 +187,6 @@ namespace Shared.database
             acc.GuildRank = founder ? 40 : 0;
             acc.FlushAsync();
             return DbAddGuildMemberStatus.OK;
-        }
-
-        public Task AddMarketEntrySafety(DbAccount account, List<(ushort, string)> itemTypes, int sellerId, string sellerName, int price, int timeLeft, CurrencyType currency, Action<string> log = null)
-        {
-            var trans = _db.CreateTransaction();
-            var ids = itemTypes.Select(itemType =>
-            {
-                var id = _db.StringIncrement("nextMarketId");
-                if (log != null)
-                    log.Invoke($"Added new offer with ID {id} and price {price} to the marketplace.");
-
-                var data = new DbMarketData(_db, (int)id)
-                {
-                    ItemType = itemType.Item1,
-                    SellerName = sellerName,
-                    SellerId = sellerId,
-                    Currency = currency,
-                    Price = price,
-                    StartTime = DateTime.UtcNow.ToUnixTimestamp(),
-                    TimeLeft = timeLeft,
-                    ItemData = itemType.Item2
-                };
-                data.Flush();
-                return (int)id;
-            }).ToList();
-
-            var offers = account.MarketOffers.ToList();
-            offers.AddRange(ids);
-
-            account.MarketOffers = offers.ToArray();
-
-            var task = account.FlushAsync(trans).ContinueWith(t =>
-            {
-                if (!t.IsCanceled && account != null)
-                {
-                    if (log != null)
-                        log.Invoke(
-                            $"[Amount: {account.MarketOffers.Length + ids.Count}] Successfully " +
-                            $"added total of {ids.Count} entr{(ids.Count > 1 ? "ies" : "y")} " +
-                            $"into the marketplace to the account ID {account.AccountId}."
-                        );
-
-                    account.Reload("marketOffers");
-                }
-            });
-
-            trans.Execute();
-            return task;
         }
 
         public bool AddMemberToParty(IDatabase db, string accname, int AccId, int partyId)
@@ -434,7 +385,6 @@ namespace Shared.database
                 MaxCharSlot = newAccounts.MaxCharSlot,
                 RegTime = DateTime.Now,
                 Guest = true,
-                StoredPotions = new int[8],
                 Fame = newAccounts.Fame,
                 TotalFame = newAccounts.Fame,
                 Credits = newAccounts.Credits,
@@ -837,7 +787,6 @@ namespace Shared.database
                 RegTime = DateTime.Now,
                 Guest = isGuest,
                 Fame = newAccounts.Fame,
-                StoredPotions = new int[8],
                 TotalFame = newAccounts.Fame,
                 Credits = newAccounts.Credits,
                 TotalCredits = newAccounts.Credits,
@@ -934,32 +883,6 @@ namespace Shared.database
             var giftBytes = GetGiftBytes(gList.ToArray());
 
             return SetGifts(acc, giftBytes, transaction);
-        }
-
-        public Task RemoveMarketEntrySafety(DbAccount account, int id, Action<string> log = null)
-        {
-            var trans = _db.CreateTransaction();
-            trans.HashDeleteAsync("market", id);
-
-            var offers = account.MarketOffers.ToList();
-            offers.Remove(id);
-
-            account.MarketOffers = offers.ToArray();
-
-            var task = account.FlushAsync(trans).ContinueWith(t =>
-            {
-                if (!t.IsCanceled && account != null)
-                {
-                    if (log != null)
-                        log.Invoke($"[Amount: {account.MarketOffers.Length}] Successfully removed 1 entry (ID: {id}) of the marketplace from the account ID {account.AccountId}.");
-
-                    account.Reload("marketOffers");
-                }
-            });
-
-            trans.Execute();
-
-            return task;
         }
 
         public bool RemoveParty(DbAccount leader, HashSet<DbAccount> members, int partyId)

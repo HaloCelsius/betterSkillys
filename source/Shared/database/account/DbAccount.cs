@@ -45,7 +45,6 @@ namespace Shared.database.account
         public int TotalFame { get => GetValue<int>("totalFame"); set => SetValue("totalFame", value); }
         public string UUID { get => GetValue<string>("uuid"); set => SetValue("uuid", value); }
         public int VaultCount { get => GetValue<int>("vaultCount"); set => SetValue("vaultCount", value); }
-        public int[] StoredPotions { get => GetValue<int[]>("storedPotions"); set => SetValue("storedPotions", value); }
         internal string LockToken { get; set; }
 
         public DbAccount(IDatabase db, int accountId, string field = null, bool isAsync = false)

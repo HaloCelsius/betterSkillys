@@ -206,10 +206,6 @@ namespace WorldServer.core.objects
                     return new GuildMerchant(gameServer, objectType);
                 case "ClosedVaultChestGold":
                 case "VaultChest":
-                case "MarketNPC":
-                case "SkillTree":
-                case "Forge":
-                case "StatNPC":
                     return new SellableMerchant(gameServer, objectType);
             }
             return new StaticObject(gameServer, objectType, null, true, false, false);

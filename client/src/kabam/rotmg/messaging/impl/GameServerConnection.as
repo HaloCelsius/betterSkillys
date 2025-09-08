@@ -91,11 +91,6 @@ import kabam.rotmg.game.signals.AddSpeechBalloonSignal;
 import kabam.rotmg.game.signals.AddTextLineSignal;
 import kabam.rotmg.game.view.components.QueuedStatusText;
 import kabam.rotmg.maploading.signals.HideMapLoadingSignal;
-import kabam.rotmg.market.signals.MemMarketAddSignal;
-import kabam.rotmg.market.signals.MemMarketBuySignal;
-import kabam.rotmg.market.signals.MemMarketMyOffersSignal;
-import kabam.rotmg.market.signals.MemMarketRemoveSignal;
-import kabam.rotmg.market.signals.MemMarketSearchSignal;
 import kabam.rotmg.messaging.impl.data.GroundTileData;
 import kabam.rotmg.messaging.impl.data.ObjectData;
 import kabam.rotmg.messaging.impl.data.ObjectStatusData;
@@ -136,12 +131,6 @@ import kabam.rotmg.messaging.impl.incoming.TradeDone;
 import kabam.rotmg.messaging.impl.incoming.TradeRequested;
 import kabam.rotmg.messaging.impl.incoming.TradeStart;
 import kabam.rotmg.messaging.impl.incoming.Update;
-import kabam.rotmg.messaging.impl.incoming.bounty.BountyMemberListSend;
-import kabam.rotmg.messaging.impl.incoming.market.MarketAddResult;
-import kabam.rotmg.messaging.impl.incoming.market.MarketBuyResult;
-import kabam.rotmg.messaging.impl.incoming.market.MarketMyOffersResult;
-import kabam.rotmg.messaging.impl.incoming.market.MarketRemoveResult;
-import kabam.rotmg.messaging.impl.incoming.market.MarketSearchResult;
 import kabam.rotmg.messaging.impl.incoming.party.InvitedToParty;
 import kabam.rotmg.messaging.impl.outgoing.AcceptTrade;
 import kabam.rotmg.messaging.impl.outgoing.AoeAck;
@@ -170,24 +159,14 @@ import kabam.rotmg.messaging.impl.outgoing.PlayerHit;
 import kabam.rotmg.messaging.impl.outgoing.PlayerShoot;
 import kabam.rotmg.messaging.impl.outgoing.PlayerText;
 import kabam.rotmg.messaging.impl.outgoing.Pong;
-import kabam.rotmg.messaging.impl.outgoing.PotionStorageInteraction;
 import kabam.rotmg.messaging.impl.outgoing.RequestTrade;
 import kabam.rotmg.messaging.impl.outgoing.BreakdownSlot;
 import kabam.rotmg.messaging.impl.outgoing.ShootAck;
 import kabam.rotmg.messaging.impl.outgoing.Reskin;
 import kabam.rotmg.messaging.impl.outgoing.SquareHit;
 import kabam.rotmg.messaging.impl.outgoing.Teleport;
-import kabam.rotmg.messaging.impl.outgoing.UpgradeStat;
 import kabam.rotmg.messaging.impl.outgoing.UseItem;
 import kabam.rotmg.messaging.impl.outgoing.UsePortal;
-import kabam.rotmg.messaging.impl.outgoing.UsePotion;
-import kabam.rotmg.messaging.impl.outgoing.bounty.BountyMemberListRequest;
-import kabam.rotmg.messaging.impl.outgoing.bounty.BountyRequest;
-import kabam.rotmg.messaging.impl.outgoing.market.MarketAdd;
-import kabam.rotmg.messaging.impl.outgoing.market.MarketBuy;
-import kabam.rotmg.messaging.impl.outgoing.market.MarketMyOffers;
-import kabam.rotmg.messaging.impl.outgoing.market.MarketRemove;
-import kabam.rotmg.messaging.impl.outgoing.market.MarketSearch;
 import kabam.rotmg.messaging.impl.outgoing.party.JoinParty;
 import kabam.rotmg.messaging.impl.outgoing.party.PartyInvite;
 import kabam.rotmg.minimap.control.UpdateGameObjectTileSignal;
@@ -196,8 +175,6 @@ import kabam.rotmg.minimap.model.UpdateGroundTileVO;
 import kabam.rotmg.servers.api.Server;
 import kabam.rotmg.ui.model.Key;
 import kabam.rotmg.ui.model.UpdateGameObjectTileVO;
-import kabam.rotmg.ui.signals.LegendaryPopUpSignal;
-import kabam.rotmg.ui.signals.MythicalPopUpSignal;
 import kabam.rotmg.ui.signals.ShowKeySignal;
 import kabam.rotmg.ui.signals.ShowKeyUISignal;
 import kabam.rotmg.ui.signals.UpdateBackpackTabSignal;
@@ -284,18 +261,9 @@ public class GameServerConnection
       public static const PARTY_INVITE:int = 71;
       public static const INVITED_TO_PARTY:int = 72;
       public static const JOIN_PARTY:int = 73;
-      public static const USE_STORAGE:int = 74;
+       // 74
       public static const SWITCH_MUSIC:int = 75;
-      public static const MARKET_SEARCH:int = 76;
-      public static const MARKET_SEARCH_RESULT:int = 77;
-      public static const MARKET_BUY:int = 78;
-      public static const MARKET_BUY_RESULT:int = 79;
-      public static const MARKET_ADD:int = 80;
-      public static const MARKET_ADD_RESULT:int = 81;
-      public static const MARKET_REMOVE:int = 82;
-      public static const MARKET_REMOVE_RESULT:int = 83;
-      public static const MARKET_MY_OFFERS:int = 84;
-      public static const MARKET_MY_OFFERS_RESULT:int = 85;
+       // 76 - 85
       public static const BREAKDOWN_SLOT:int = 86;
       public static const IMMINENT_ARENA_WAVE:int = 87;
 
@@ -486,17 +454,6 @@ public class GameServerConnection
          messages.map(INVITEDTOGUILD).toMessage(InvitedToGuild).toMethod(this.onInvitedToGuild);
          messages.map(SWITCH_MUSIC).toMessage(SwitchMusic).toMethod(this.onSwitchMusic);
          messages.map(PLAYSOUND).toMessage(PlaySound).toMethod(this.onPlaySound);
-         messages.map(MARKET_SEARCH).toMessage(MarketSearch);
-         messages.map(MARKET_SEARCH_RESULT).toMessage(MarketSearchResult).toMethod(this.onMarketSearchResult);
-         messages.map(MARKET_BUY).toMessage(MarketBuy);
-         messages.map(MARKET_BUY_RESULT).toMessage(MarketBuyResult).toMethod(this.onMarketBuyResult);
-         messages.map(MARKET_ADD).toMessage(MarketAdd);
-         messages.map(MARKET_ADD_RESULT).toMessage(MarketAddResult).toMethod(this.onMarketAddResult);
-         messages.map(MARKET_REMOVE).toMessage(MarketRemove);
-         messages.map(MARKET_REMOVE_RESULT).toMessage(MarketRemoveResult).toMethod(this.onMarketRemoveResult);
-         messages.map(MARKET_MY_OFFERS).toMessage(MarketMyOffers);
-         messages.map(MARKET_MY_OFFERS_RESULT).toMessage(MarketMyOffersResult).toMethod(this.onMarketMyOffersResult);
-         messages.map(USE_STORAGE).toMessage(PotionStorageInteraction);
          messages.map(AOEACK).toMessage(AoeAck);
          messages.map(SHOOTACK).toMessage(ShootAck);
          messages.map(BREAKDOWN_SLOT).toMessage(BreakdownSlot);
@@ -573,20 +530,9 @@ public class GameServerConnection
          messages.unmap(ESCAPE);
          messages.unmap(AOEACK);
          messages.unmap(SHOOTACK);
-         messages.unmap(MARKET_SEARCH);
-         messages.unmap(MARKET_SEARCH_RESULT);
-         messages.unmap(MARKET_BUY);
-         messages.unmap(MARKET_BUY_RESULT);
-         messages.unmap(MARKET_ADD);
-         messages.unmap(MARKET_ADD_RESULT);
-         messages.unmap(MARKET_REMOVE);
-         messages.unmap(MARKET_REMOVE_RESULT);
-         messages.unmap(MARKET_MY_OFFERS);
-         messages.unmap(MARKET_MY_OFFERS_RESULT);
          messages.unmap(PARTY_INVITE);
          messages.unmap(INVITED_TO_PARTY);
          messages.unmap(JOIN_PARTY);
-         messages.unmap(USE_STORAGE);
          messages.unmap(SWITCH_MUSIC);
          messages.unmap(BREAKDOWN_SLOT);
          messages.unmap(IMMINENT_ARENA_WAVE);
@@ -824,13 +770,6 @@ public class GameServerConnection
          }
          SoundEffectLibrary.play("error");
          return false;
-      }
-
-      public function PotionInteraction(type:int, action:int):void{
-         var _local_1:PotionStorageInteraction = (this.messages.require(GameServerConnection.USE_STORAGE) as PotionStorageInteraction);
-         _local_1.type_ = type;
-         _local_1.action_ = action;
-         this.serverConnection.sendMessage(_local_1);
       }
 
       private function applyUseItem(owner:GameObject, slotId:int, objectType:int, itemData:XML) : void
@@ -2166,79 +2105,6 @@ public class GameServerConnection
          var dialog:Dialog = event.currentTarget as Dialog;
          dialog.parent.removeChild(dialog);
          this.gs_.closed.dispatch();
-      }
-
-
-      /* Market */
-      private function onMarketSearchResult(searchResult:MarketSearchResult) : void
-      {
-         MemMarketSearchSignal.instance.dispatch(searchResult);
-      }
-
-      /* Market */
-      private function onMarketBuyResult(buyResult:MarketBuyResult) : void
-      {
-         MemMarketBuySignal.instance.dispatch(buyResult);
-      }
-
-      /* Market */
-      private function onMarketAddResult(addResult:MarketAddResult) : void
-      {
-         MemMarketAddSignal.instance.dispatch(addResult);
-      }
-
-      /* Market */
-      private function onMarketRemoveResult(removeResult:MarketRemoveResult) : void
-      {
-         MemMarketRemoveSignal.instance.dispatch(removeResult);
-      }
-
-      /* Market */
-      private function onMarketMyOffersResult(myOffersResult:MarketMyOffersResult) : void
-      {
-         MemMarketMyOffersSignal.instance.dispatch(myOffersResult);
-      }
-
-      /* Market */
-      public function marketSearch(itemType:int) : void
-      {
-         var search:MarketSearch = this.messages.require(MARKET_SEARCH) as MarketSearch;
-         search.itemType_ = itemType;
-         this.serverConnection.sendMessage(search);
-      }
-
-      /* Market */
-      public function marketRemove(id:int) : void
-      {
-         var remove:MarketRemove = this.messages.require(MARKET_REMOVE) as MarketRemove;
-         remove.id_ = id;
-         this.serverConnection.sendMessage(remove);
-      }
-
-      /* Market */
-      public function marketMyOffers() : void
-      {
-         var myOffers:MarketMyOffers = this.messages.require(MARKET_MY_OFFERS) as MarketMyOffers;
-         this.serverConnection.sendMessage(myOffers);
-      }
-
-      /* Market */
-      public function marketBuy(id:int) : void
-      {
-         var buy:MarketBuy = this.messages.require(MARKET_BUY) as MarketBuy;
-         buy.id_ = id;
-         this.serverConnection.sendMessage(buy);
-      }
-
-      /* Market */
-      public function marketAdd(items:Vector.<int>, price:int, currency:int, hours:int) : void
-      {
-         var add:MarketAdd = this.messages.require(MARKET_ADD)  as MarketAdd;
-         add.slots_= items;
-         add.price_ = price;
-         add.currency_ = currency;
-         add.hours_ = hours;
-         this.serverConnection.sendMessage(add);
       }
 
        private function onInvitedToParty(invitedToParty:InvitedToParty) : void

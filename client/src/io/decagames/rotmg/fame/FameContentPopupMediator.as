@@ -100,7 +100,7 @@ import robotlegs.bender.bundles.mvcs.Mediator;
                 } else {
                     bornOn = this.player.getCharacterById(characterID).bornOn();
                 }
-            }catch (e) {
+            }catch (e:uint) {
                 bornOn = "Unknown";
             }
 

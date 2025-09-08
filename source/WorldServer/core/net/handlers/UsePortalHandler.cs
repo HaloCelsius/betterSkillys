@@ -128,21 +128,6 @@ namespace WorldServer.core.net.handlers
                 return;
             }
 
-            if (world.IdName == "Trial of Souls")
-            {
-                if (player.Client.Character.CompletedTrialOfSouls)
-                {
-                    player.SendError($"You have already completed the trial of souls");
-                    return;
-                }
-
-                if (player.GetMaxedStats() != 8)
-                {
-                    player.SendError($"You must be 8/8 to enter this dungeon");
-                    return;
-                }
-            }
-
             if (world.InstanceType == WorldResourceInstanceType.Vault)
                 (world as VaultWorld).SetOwner(player.AccountId);
             else if (!world.CreateInstance)

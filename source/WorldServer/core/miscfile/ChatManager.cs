@@ -203,19 +203,6 @@ namespace WorldServer.core.miscfile
             return true;
         }
 
-        public bool SendInfoMarket(int accId, string itemId, int realPrice, int resultPrice, int Tax)
-        {
-            GameServer.InterServerManager.Publish(Channel.Chat, new ChatMsg()
-            {
-                Type = ChatType.Info,
-                Instance = GameServer.InstanceId,
-                To = accId,
-                Text = $"<Marketplace> {itemId} has been sold for {realPrice} (You have obtained: {resultPrice}) Fame, included {Tax}% Tax."
-            });
-
-            return true;
-        }
-
         public void Dispose()
         {
             GameServer.InterServerManager.NewServer -= AnnounceNewServer;

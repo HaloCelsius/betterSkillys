@@ -29,7 +29,7 @@
         RemoveNegativeConditions,
         ClearConditionEffectSelf,
         RemoveNegativeConditionsSelf,
-        ShurikenAbility,
+        Shuriken,
         DazeBlast,
         PermaPet,
         Backpack,

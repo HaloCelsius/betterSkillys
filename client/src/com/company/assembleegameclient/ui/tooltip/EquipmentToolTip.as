@@ -32,7 +32,6 @@ import flash.utils.Timer;
 
 import kabam.rotmg.constants.ActivationType;
 import kabam.rotmg.constants.ItemConstants;
-import kabam.rotmg.market.content.MemMarketItem;
 import kabam.rotmg.messaging.impl.data.StatData;
 
 public class EquipmentToolTip extends ToolTip
