@@ -29,18 +29,8 @@ import flash.ui.Mouse;
 import flash.ui.MouseCursor;
 import flash.ui.MouseCursorData;
 
-import io.decagames.rotmg.ui.buttons.SliceScalingButton;
-import io.decagames.rotmg.ui.defaults.DefaultLabelFormat;
-import io.decagames.rotmg.ui.sliceScaling.SliceScalingBitmap;
-import io.decagames.rotmg.ui.texture.TextureParser;
-import io.decagames.rotmg.utils.colors.GreyScale;
-
 import kabam.rotmg.core.StaticInjectorContext;
-import kabam.rotmg.messaging.impl.GameServerConnection;
-
 import kabam.rotmg.ui.signals.ToggleShowTierTagSignal;
-
-import kabam.rotmg.ui.view.components.MenuOptionsBar;
 
 public class Options extends Sprite
 {
@@ -66,11 +56,13 @@ public class Options extends Sprite
     private var continueButton_:TitleMenuOption;
     private var resetToDefaultsButton_:TitleMenuOption;
     private var homeButton_:TitleMenuOption;
-    private var optionsBackground:SliceScalingBitmap;
     private var tabs_:Vector.<OptionsTabTitle>;
     private var selected_:OptionsTabTitle = null;
     private var options_:Vector.<Sprite>;
     private var optionIndex_:int = 0;
+    private var bg:Sprite;
+    private var barBox:Sprite;
+    private var lines:Sprite;
 
     public function Options(gs:GameSprite)
     {
@@ -79,10 +71,14 @@ public class Options extends Sprite
         this.options_ = new Vector.<Sprite>();
         super();
         this.gs_ = gs;
-        graphics.clear();
-        graphics.beginFill(2829099,0.8);
-        graphics.drawRect(0,0,800,600);
-        graphics.endFill();
+
+        bg = new Sprite();
+        var b:Graphics = bg.graphics;
+        b.clear();
+        b.beginFill(2829099, 0.8);
+        b.drawRect(0, 0, 800, 600);
+        b.endFill();
+        gs.forceScaledLayer.addChild(bg);
 
         this.title_ = new SimpleText(36,16777215,false,800,0);
         this.title_.setBold(true);
@@ -94,6 +90,7 @@ public class Options extends Sprite
         this.title_.y = 8;
         addChild(this.title_);
         this.makeBar();
+        this.drawLines();
         this.continueButton_ = new TitleMenuOption("continue",36,false);
         this.continueButton_.addEventListener(MouseEvent.CLICK,this.onContinueClick);
         addChild(this.continueButton_);
@@ -116,17 +113,33 @@ public class Options extends Sprite
         }
         addEventListener(Event.ADDED_TO_STAGE,this.onAddedToStage);
         addEventListener(Event.REMOVED_FROM_STAGE,this.onRemovedFromStage);
+        if (WebMain.STAGE) {
+            WebMain.STAGE.stage.addEventListener(Event.RESIZE, positionAssets);
+            WebMain.STAGE.stage.dispatchEvent(new Event(Event.RESIZE));
+        }
+    }
+
+    private function drawLines():void
+    {
+        lines = new Sprite();
+        var b:Graphics = lines.graphics;
+        b.clear();
+        b.lineStyle(2,6184542);
+        b.moveTo(0,100);
+        b.lineTo(800,100);
+        b.lineStyle();
+        gs_.forceScaledLayer.addChild(lines);
     }
 
     private function makeBar():void
     {
-        var box:Sprite = new Sprite();
-        var b:Graphics = box.graphics;
+        barBox = new Sprite();
+        var b:Graphics = barBox.graphics;
         b.clear();
-        b.beginFill(0, 0.5);
+        b.beginFill(6184542, 0.5);
         b.drawRect(0, 525, 800, 50);
         b.endFill();
-        addChild(box);
+        gs_.forceScaledLayer.addChild(barBox);
     }
 
     private function onContinueClick(event:MouseEvent) : void
@@ -232,6 +245,7 @@ public class Options extends Sprite
     {
         stage.removeEventListener(KeyboardEvent.KEY_DOWN,this.onKeyDown,false);
         stage.removeEventListener(KeyboardEvent.KEY_UP,this.onKeyUp,false);
+        WebMain.STAGE.stage.removeEventListener(Event.RESIZE, positionAssets);
     }
 
     private function onKeyDown(event:KeyboardEvent) : void
@@ -247,6 +261,21 @@ public class Options extends Sprite
     {
         stage.focus = null;
         parent.removeChild(this);
+        gs_.forceScaledLayer.removeChild(bg);
+        gs_.forceScaledLayer.removeChild(barBox);
+        gs_.forceScaledLayer.removeChild(lines);
+    }
+
+    private function positionAssets(e:Event = null):void
+    {
+        var width:int = WebMain.STAGE.stageWidth;
+        var height:int = WebMain.STAGE.stageHeight;
+        var sWidth:* = 800 / width;
+        var sHeight:* = 600 / height;
+        var result:* = sHeight / sWidth;
+        this.bg.width = 800 * result;
+        this.barBox.width = 800 * result;
+        this.lines.width = 800 * result;
     }
 
     private function onKeyUp(event:KeyboardEvent) : void

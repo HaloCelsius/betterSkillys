@@ -16,22 +16,18 @@ package kabam.rotmg.maploading.view
    public class MapLoadingView extends Sprite
    {
       public static const MINIMUM_DISPLAY_TIME:Number = 100;
-      public static const MAX_DIFFICULTY:int = 5;
-      public static const FADE_OUT_TIME:Number = 1;
+      public static const MAX_DIFFICULTY:int = 0;
+      public static const FADE_OUT_TIME:Number = 0.4;
       
       public var MapLoadingSymbol:Class;
       private var screen:DisplayObjectContainer;
-      private var mapNameField:SimpleText;
       private var indicators:Vector.<DisplayObject>;
       private var diffRow:MovieClip;
-      private var charContainer:MovieClip;
       private var mapHasLoaded:Boolean;
       private var asset:UnpackEmbed;
       private var dataIsSet:Boolean;
       private var background:MovieClip;
-      private var mapName:String;
       private var difficulty:int;
-      private var animation:Animation;
       private const minimumDisplayTimer:Timer = new Timer(MINIMUM_DISPLAY_TIME,1);
       private var minimumTimeElapsed:Boolean;
       
@@ -46,18 +42,8 @@ package kabam.rotmg.maploading.view
       
       private function onLoadScreen(asset:UnpackEmbed) : void
       {
-         var mapNameContainer:MovieClip = null;
          this.screen = asset.content as MovieClip;
          this.background = this.screen.getChildByName("background") as MovieClip;
-         mapNameContainer = this.screen.getChildByName("mapNameContainer") as MovieClip;
-         this.mapNameField = new SimpleText(30,16777215,false,0,0);
-         this.mapNameField.setBold(true);
-         this.mapNameField.autoSize = TextFieldAutoSize.CENTER;
-         this.mapNameField.updateMetrics();
-         this.mapNameField.x = mapNameContainer.x;
-         this.mapNameField.y = mapNameContainer.y;
-         this.screen.addChild(this.mapNameField);
-         this.charContainer = this.screen.getChildByName("charContainer") as MovieClip;
          this.diffRow = this.screen.getChildByName("difficulty_indicators") as MovieClip;
          this.indicators = new Vector.<DisplayObject>(MAX_DIFFICULTY);
          for(var i:int = 1; i <= MAX_DIFFICULTY; i++)
@@ -68,11 +54,9 @@ package kabam.rotmg.maploading.view
          this.setValues();
       }
       
-      public function display(mapName:String, difficulty:int, animation:Animation) : void
+      public function display() : void
       {
-         this.mapName = Boolean(mapName)?mapName:"";
-         this.difficulty = 5;
-         this.animation = animation;
+         this.difficulty = 0;
          this.dataIsSet = true;
          this.startMinimumDisplayTimer();
          this.setValues();
@@ -98,33 +82,10 @@ package kabam.rotmg.maploading.view
       
       private function setValues() : void
       {
-         var i:int = 0;
          if(this.screen && this.dataIsSet)
          {
-            this.mapNameField.text = this.mapName;
-            if(this.difficulty <= 0)
-            {
-               this.screen.getChildByName("bgGroup").visible = false;
-               this.diffRow.visible = false;
-            }
-            else
-            {
-               this.screen.getChildByName("bgGroup").visible = true;
-               this.diffRow.visible = true;
-               i = 0;
-               while(i < MAX_DIFFICULTY)
-               {
-                  this.indicators[i].visible = i < this.difficulty;
-                  i++;
-               }
-            }
-            if(this.animation)
-            {
-               this.animation.start();
-               addChild(this.animation);
-               this.animation.x = this.charContainer.x - this.animation.width * 0.5 + 5;
-               this.animation.y = this.charContainer.y - this.animation.height * 0.5;
-            }
+             this.screen.getChildByName("bgGroup").visible = false;
+             this.diffRow.visible = false;
          }
       }
       
@@ -155,8 +116,7 @@ package kabam.rotmg.maploading.view
       
       private function onRemovedFromStage(e:Event) : void
       {
-         this.animation && this.animation.dispose();
-         this.animation = null;
+          // empty
       }
    }
 }

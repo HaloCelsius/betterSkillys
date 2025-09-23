@@ -45,7 +45,7 @@ package kabam.rotmg.maploading.commands
       public function execute() : void
       {
          var view:MapLoadingView = new MapLoadingView();
-         view.display(this.info.displayName_,this.info.difficulty_,this.makeAnimation());
+         view.display();
          this.layers.top.addChild(view);
       }
       

@@ -55,7 +55,7 @@ public class GameObject extends BasicObject {
     protected static const PAUSED_FILTER:ColorMatrixFilter = new ColorMatrixFilter(MoreColorUtil.greyscaleFilterMatrix);
     public static const ATTACK_PERIOD:int = 300;
     public static const DEFAULT_HP_BAR_Y_OFFSET:int = 5;
-    public static const DEFAULT_HP_BAR_HEIGHT:int = 4;
+    public static const DEFAULT_HP_BAR_HEIGHT:int = 5;
     public static const DEFAULT_HP_BAR_WIDTH:int = 20;
 
     private var isStunImmune_:Boolean = false;

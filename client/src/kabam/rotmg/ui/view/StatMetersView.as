@@ -82,9 +82,8 @@ public class StatMetersView extends Sprite
       //this.mpBar_.draw(player.mp_,player.maxMP_,player.maxMPBoost_,player.maxMPMax_);
 
        // For dynamic bars we can just add hp, however conditions that hide and show them can be added here:
-
-       this.activeBars.push(mpBar_);
        this.activeBars.push(hpBar_);
+       this.activeBars.push(mpBar_);
 
        var numActiveBars:int = this.activeBars.length;
 

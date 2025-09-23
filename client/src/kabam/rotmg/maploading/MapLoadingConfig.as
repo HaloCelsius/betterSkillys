@@ -13,8 +13,6 @@ import kabam.rotmg.maploading.signals.ShowMapLoadingSignal;
    
    public class MapLoadingConfig implements IConfig
    {
-       
-      
       [Inject]
       public var injector:Injector;
       
