@@ -24,7 +24,7 @@ public class GlowRedrawer {
     private static var gradient_:Shape = getGradient();
     private static var glowHashes:Dictionary = new Dictionary();
 
-    public static function outlineGlow(oBmd:BitmapData, color:uint, scale:Number = 1.4, caching:Boolean = true) {
+    public static function outlineGlow(oBmd:BitmapData, color:uint, scale:Number = 1.4, caching:Boolean = true):* {
         var hash:String = getHash(color, scale);
         if (caching && isCached(oBmd, hash))
             return (glowHashes[oBmd][hash]);

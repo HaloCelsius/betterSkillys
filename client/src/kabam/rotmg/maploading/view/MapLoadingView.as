@@ -15,8 +15,7 @@ package kabam.rotmg.maploading.view
    
    public class MapLoadingView extends Sprite
    {
-      public static const MINIMUM_DISPLAY_TIME:Number = 100;
-      public static const MAX_DIFFICULTY:int = 0;
+      public static const MINIMUM_DISPLAY_TIME:Number = 250;
       public static const FADE_OUT_TIME:Number = 0.4;
       
       public var MapLoadingSymbol:Class;
@@ -45,11 +44,6 @@ package kabam.rotmg.maploading.view
          this.screen = asset.content as MovieClip;
          this.background = this.screen.getChildByName("background") as MovieClip;
          this.diffRow = this.screen.getChildByName("difficulty_indicators") as MovieClip;
-         this.indicators = new Vector.<DisplayObject>(MAX_DIFFICULTY);
-         for(var i:int = 1; i <= MAX_DIFFICULTY; i++)
-         {
-            this.indicators[i - 1] = this.diffRow.getChildByName("indicator_" + i);
-         }
          addChild(this.screen);
          this.setValues();
       }
